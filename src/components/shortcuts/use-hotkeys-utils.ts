@@ -6,6 +6,12 @@ export function isModifierKey(key: string): boolean {
   return MODIFIER_KEYS.has(key);
 }
 
+export function hasCommandModifier(
+  e: Pick<KeyboardEvent, "metaKey" | "ctrlKey" | "altKey">,
+): boolean {
+  return e.metaKey || e.ctrlKey || e.altKey;
+}
+
 export function findSequenceMatch(
   buffer: string[],
   shortcuts: ShortcutDefinition[],
