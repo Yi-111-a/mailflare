@@ -164,6 +164,11 @@ export const emailQueryChanges: JmapMethodHandler = async () => {
 	return { type: "cannotCalculateChanges" };
 };
 
+/** RFC 6901 unescape: ~1 -> /, then ~0 -> ~ (order matters for ~01 -> ~1 round-trip). */
+function unescapeJsonPointer(token: string): string {
+	return token.replace(/~1/g, "/").replace(/~0/g, "~");
+}
+
 /** Where a patched `mailboxIds` puts the message: exactly one JMAP mailbox is supported. */
 function targetFromMailboxIds(row: MessageRow, patch: Record<string, unknown>, accessible: Set<string>): { status?: string; folderId?: string | null } | { error: Record<string, unknown> } | null {
 	let ids: string[] | null = null;
@@ -175,7 +180,7 @@ function targetFromMailboxIds(row: MessageRow, patch: Record<string, unknown>, a
 		for (const [key, value] of Object.entries(patch)) {
 			if (!key.startsWith("mailboxIds/")) continue;
 			touched = true;
-			const id = key.slice("mailboxIds/".length);
+			const id = unescapeJsonPointer(key.slice("mailboxIds/".length));
 			if (value) current.add(id);
 			else current.delete(id);
 		}
@@ -204,7 +209,7 @@ function keywordsFromPatch(patch: Record<string, unknown>): { read?: boolean; st
 		result.starred = !!map[KEYWORD_FLAGGED];
 	}
 	for (const [key, value] of Object.entries(patch)) {
-		if (key.startsWith("keywords/")) apply(key.slice("keywords/".length), value);
+		if (key.startsWith("keywords/")) apply(unescapeJsonPointer(key.slice("keywords/".length)), value);
 	}
 	return result;
 }
