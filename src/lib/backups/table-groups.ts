@@ -5,6 +5,7 @@ export const BACKUP_TABLE_GROUPS: { id: BackupTableGroupId; label: string; table
 	{ id: "mail", label: "Mail and related data", tables: ["folders", "messages", "message_attachments", "shared_attachment_links", "outbound_jobs", "email_templates", "calendar_events", "booking_events", "auto_reply_deliveries", "spam_token_stats", "spam_reputation", "spam_feedback"] },
 	{ id: "automation", label: "Routing and webhooks", tables: ["routing_rules", "webhooks", "webhook_deliveries"] },
 	{ id: "assistant", label: "Assistant and AI usage", tables: ["mailbox_agent_settings", "agent_conversations", "agent_chat_messages", "agent_jobs", "agent_draft_metadata", "agent_send_approvals", "ai_usage"] },
+	{ id: "drive", label: "Drive uploads and shares", tables: ["drive_items", "drive_upload_parts", "drive_shares"] },
 	{ id: "system", label: "App settings and history", tables: ["audit_logs", "backup_settings", "backups", "app_settings", "license_settings"] },
 ];
 
